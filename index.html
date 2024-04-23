@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Website</title>
+    <link rel="stylesheet" href="addtocart.css" />
+    <link rel="stylesheet" href="search.css" />
+    <script src="https://kit.fontawesome.com/06be1d9200.js" crossorigin="anonymous">
+    </script>
+    <style>
+        .button1 {
+            padding: 15px 25px;
+            font-size: 24px;
+            text-align: center;
+            cursor: pointer;
+            outline: none;
+            color: #fff;
+            background-color: #04AA6D;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+
+            .button1:hover {
+                background-color: #9ef357
+            }
+
+            .button1:active {
+                background-color: #eec96f;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+    </style>
+
+</head>
+<body>
+    <div class="header">
+        <input type="text" id="find" oninput="search()" placeholder="Search for products...">
+        <div class="m1">
+            <a href="indexedDb.html">IndexedDB</a>
+        </div>
+        <div class="m2">
+            <a href="local storage.html">LocalStorage</a>
+        </div>
+        <div class="m3">
+            <a href="SessionStorage.html">SessionStorage</a>
+        </div>
+        <div class="m4">
+            <a href="File upload.html">Image Upload</a>
+        </div>
+        <div class="cart">
+            <i class="fa-solid fa-cart-shopping"></i><p id="count">0</p>
+        </div>
+    </div>
+    <div class="container">
+
+        <div id="root"></div>
+        <div class="sidebar">
+            <div class="head"><p>My Cart</p></div>
+            <div id="cartItem">Your cart is empty</div>
+            <div class="foot">
+                <h3>Total</h3>
+                <h2 id="total">$0.00</h2>
+
+            </div>
+            <button class="button1"><a href="order.html">Order Now</a></button>
+        </div>
+    </div>
+
+
+    <script src="addtocart.js"></script>
+    <script src="searchengine.js"></script>
+ 
+</body>
+</html>

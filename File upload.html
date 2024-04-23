@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ECommerce</title>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+<body>
+    <div>
+        <section class="product-submission container">
+            <h2 class="section-title">Upload a New Product</h2>
+            <form id="productForm">
+                <label for="title">Product Title:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="price">Product Price:</label>
+                <input type="number" id="price" name="price" required>
+
+                <label for="image">Product Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+
+                <img id="previewImage" alt="Preview" style="display:none; max-width: 100%; margin-top: 10px;">
+
+                <button type="button" onclick="submitProduct()">Submit Product</button>
+            </form>
+        </section>
+
+        <!-- New Products Section -->
+        <section class="new-products container">
+            <h2 class="section-title">Recent Upload Products</h2>
+            <div id="newProducts"></div>
+        </section>
+    </div>
+</body>
+</html>
+<script>
+    function submitProduct() {
+
+        const title = document.getElementById('title').value;
+        const price = document.getElementById('price').value;
+        const imageInput = document.getElementById('image');
+        if (!title || !price || !imageInput.files[0]) {
+            alert('Please fill in all fields');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const image = e.target.result;
+
+            const newProductBox = document.createElement('div');
+            newProductBox.className = 'product-box';
+
+            const productHTML = `
+      <img src="${image}" alt="${title}" class="product-img">
+      <h2 class="product-title">${title}</h2>
+      <span class="product-price">$${price}</span>
+      <i class='bx bx-shopping-bag add-cart'></i>`;
+            newProductBox.innerHTML = productHTML;
+            const newProductsSection = document.getElementById('newProducts');
+            newProductsSection.insertBefore(newProductBox, newProductsSection.firstChild);
+            document.getElementById('title').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('image').value = '';
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+    }
+</script>

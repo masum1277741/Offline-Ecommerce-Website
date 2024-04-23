@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Local Storage </title>
+    <style>
+        body {
+            background-image: url("images/Free-vector-watercolor-background-Wallpaper.jpg");
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        #save {
+            margin-left: 45%;
+        }
+
+        #task-list table {
+            margin-top: 20px;
+            align-items: center;
+            width: 100%;
+        }
+
+        th, td {
+            box-sizing: border-box;
+            border: 1px solid orange;
+            padding: 10px;
+            color:aliceblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul> <li><a  href="index.html" style="color:antiquewhite"><h2>Home</h2></a> </li></ul>
+        <h1 style="text-align:center; color:darkred; font-size: 72px;">Local Storage </h1>
+        <form id="crud-form">
+            <label for="id">ID:</label>
+            <input type="number" id="id" placeholder="Enter ID" required>
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter Name" required>
+            <label for="tsp">TSP:</label>
+            <input type="text" id="tsp" placeholder="Enter TSP" required><br>
+            <button type="submit" id="save">Save</button>
+        </form>
+        <div id="task-list">
+            <table style="border-width:20px">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>TSP</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('crud-form');
+            const idInput = document.getElementById('id');
+            const nameInput = document.getElementById('name');
+            const tspInput = document.getElementById('tsp');
+            const taskTableBody = document.querySelector('#task-list table tbody');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const taskId = parseInt(idInput.value);
+                const taskName = nameInput.value;
+                const taskTSP = tspInput.value;
+
+                if (!isNaN(taskId) && taskName.trim() !== '' && taskTSP.trim() !== '') {
+                    const existingTask = getTaskById(taskId);
+
+                    if (existingTask) {
+
+                        updateTask(taskId, taskName, taskTSP);
+                        alert('updated successfully!')
+                    } else {
+
+                        const task = { id: taskId, name: taskName, tsp: taskTSP };
+                        saveTask(task);
+                        addTaskToTable(task);
+                        alert('Added successfully!')
+                    }
+
+                    idInput.value = '';
+                    nameInput.value = '';
+                    tspInput.value = '';
+                }
+            });
+
+
+            loadTasks();
+
+            function saveTask(task) {
+
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+
+                tasks.push(task);
+
+
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+
+            function loadTasks() {
+
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+ 
+                tasks.forEach(addTaskToTable);
+            }
+
+            function addTaskToTable(task) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${task.id}</td><td>${task.name}</td><td>${task.tsp}</td><td><button onclick="updateTaskForm(${task.id}, '${task.name}', '${task.tsp}')">Update</button></td><td><button onclick="deleteTask(${task.id})">Delete</button></td>`;
+                taskTableBody.appendChild(row);
+            }
+
+            window.updateTaskForm = function (taskId, taskName, taskTSP) {
+
+                idInput.value = taskId;
+                nameInput.value = taskName;
+                tspInput.value = taskTSP;
+            };
+
+            function updateTask(taskId, taskName, taskTSP) {
+
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+
+                for (let i = 0; i < tasks.length; i++) {
+                    if (tasks[i].id === taskId) {
+                        tasks[i].name = taskName;
+                        tasks[i].tsp = taskTSP;
+                        break;
+                    }
+                }
+
+
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+
+
+                taskTableBody.innerHTML = '';
+
+
+                tasks.forEach(addTaskToTable);
+            }
+
+            window.deleteTask = function (taskId) {
+
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+
+                const updatedTasks = tasks.filter(task => task.id !== taskId);
+
+
+                localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+
+
+                taskTableBody.innerHTML = '';
+
+                updatedTasks.forEach(addTaskToTable);
+                alert('Are you want to delete it ?')
+            };
+
+            function getTaskById(taskId) {
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                return tasks.find(task => task.id === taskId);
+            }
+        });
+
+    </script>
+</body>
+</html>
